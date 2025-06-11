@@ -8,7 +8,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/infra/database/prisma.service';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -31,12 +31,12 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param() id: string, @Body() body: any) {
+  async update(@Param('id') id: string, @Body() body: any) {
     return this.userService.update(id, body);
   }
 
   @Delete(':id')
-  async remove(@Param() id: string) {
+  async remove(@Param('id') id: string) {
     return this.userService.delete(id);
   }
 }
