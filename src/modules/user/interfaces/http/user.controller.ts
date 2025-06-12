@@ -10,8 +10,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { UserService } from './user.service';
-import { CreateUserUseCase } from './application/use-cases/create-user';
+import { UserService } from '../../user.service';
+import { CreateUserUseCase } from '../../application/use-cases/create-user';
 
 @Controller('users')
 export class UserController {
