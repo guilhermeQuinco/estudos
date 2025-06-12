@@ -12,15 +12,19 @@ import {
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { UserService } from '../../user.service';
 import { CreateUserUseCase } from '../../application/use-cases/create-user';
+import { FetchAllUsersUseCase } from '../../application/use-cases/fetch-all-user';
 
 @Controller('users')
 export class UserController {
-  constructor(private createUserUseCase: CreateUserUseCase) {}
+  constructor(
+    private createUserUseCase: CreateUserUseCase,
+    private fetchAllUsersUseCase: FetchAllUsersUseCase,
+  ) {}
 
-  // @Get()
-  // async findAll() {
-  //   return this.userService.findAll();
-  // }
+  @Get()
+  async findAll() {
+    return this.fetchAllUsersUseCase.execute();
+  }
 
   // @Get(':id')
   // async findOne(@Param('id') id: string) {

@@ -14,8 +14,10 @@ export class PrismaUserRepository implements UserRepository {
       data,
     });
   }
-  findAll(id: string): Promise<User[] | null> {
-    throw new Error('Method not implemented.');
+  async findAll(): Promise<User[]> {
+    const usersData = await this.prisma.user.findMany({});
+
+    return usersData.map(UserMapper.toDomain);
   }
   findOne(id: string): Promise<User | null> {
     throw new Error('Method not implemented.');

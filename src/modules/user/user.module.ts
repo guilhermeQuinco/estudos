@@ -5,16 +5,27 @@ import { UserService } from './user.service';
 import { PrismaModule } from 'src/infra/database/prisma.module';
 import { CreateUserUseCase } from './application/use-cases/create-user';
 import { PrismaUserRepository } from './infra/repositories/user-prisma.repository';
+import { FetchAllUsersUseCase } from './application/use-cases/fetch-all-user';
 
 @Module({
   imports: [PrismaModule],
   controllers: [UserController],
   providers: [
-    PrismaUserRepository,
+    {
+      provide: 'UserRepository',
+      useClass: PrismaUserRepository,
+    },
+
     {
       provide: CreateUserUseCase,
       useFactory: (repo: PrismaUserRepository) => new CreateUserUseCase(repo),
-      inject: [PrismaUserRepository],
+      inject: ['UserRepository'],
+    },
+    {
+      provide: FetchAllUsersUseCase,
+      useFactory: (repo: PrismaUserRepository) =>
+        new FetchAllUsersUseCase(repo),
+      inject: ['UserRepository'],
     },
   ],
 })
