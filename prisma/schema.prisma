@@ -17,12 +17,12 @@ datasource db {
 
 
 model User {
-  id    String     @default(uuid()) @id
-  email String     @unique
-  name  String?
+  id              String     @default(uuid()) @id
+  email           String     @unique
+  name            String
+  password        String
   tasks Task[]
 
-  @@map("users")
 }
 
 model Task {

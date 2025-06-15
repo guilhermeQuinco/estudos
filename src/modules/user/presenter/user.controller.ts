@@ -9,10 +9,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { UserService } from '../../user.service';
-import { CreateUserUseCase } from '../../application/use-cases/create-user';
-import { FetchAllUsersUseCase } from '../../application/use-cases/fetch-all-user';
+
+import { CreateUserUseCase } from '../application/use-cases/create-user/create-user.use-case';
+import { FetchAllUsersUseCase } from '../application/use-cases/find-all/fetch-all-user.use-case';
+import { CreateUserInput } from '../application/use-cases/create-user/create-user.input';
+import { UserPresenter } from './user.presenter';
 
 @Controller('users')
 export class UserController {
@@ -32,8 +33,9 @@ export class UserController {
   // }
 
   @Post()
-  async handle(@Body() body: any) {
-    return this.createUserUseCase.execute(body);
+  async handle(@Body() createUserDto: CreateUserInput) {
+    const user = await this.createUserUseCase.execute(createUserDto);
+    return new UserPresenter(user);
   }
 
   // @Put(':id')

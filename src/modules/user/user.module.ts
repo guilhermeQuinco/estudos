@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './interfaces/http/user.controller';
-import { PrismaService } from 'src/infra/database/prisma.service';
-import { UserService } from './user.service';
-import { PrismaModule } from 'src/infra/database/prisma.module';
-import { CreateUserUseCase } from './application/use-cases/create-user';
-import { PrismaUserRepository } from './infra/repositories/user-prisma.repository';
-import { FetchAllUsersUseCase } from './application/use-cases/fetch-all-user';
+import { UserController } from './presenter/user.controller';
+import { PrismaService } from 'src/shared/database/prisma.service';
+import { PrismaModule } from 'src/shared/database/prisma.module';
+import { CreateUserUseCase } from './application/use-cases/create-user/create-user.use-case';
+
+import { FetchAllUsersUseCase } from './application/use-cases/find-all/fetch-all-user.use-case';
+import { PrismaUserRepository } from './infra/prisma/user-prisma.repository';
 
 @Module({
   imports: [PrismaModule],
@@ -16,17 +16,8 @@ import { FetchAllUsersUseCase } from './application/use-cases/fetch-all-user';
       useClass: PrismaUserRepository,
     },
 
-    {
-      provide: CreateUserUseCase,
-      useFactory: (repo: PrismaUserRepository) => new CreateUserUseCase(repo),
-      inject: ['UserRepository'],
-    },
-    {
-      provide: FetchAllUsersUseCase,
-      useFactory: (repo: PrismaUserRepository) =>
-        new FetchAllUsersUseCase(repo),
-      inject: ['UserRepository'],
-    },
+    CreateUserUseCase,
+    FetchAllUsersUseCase,
   ],
 })
 export class UserModule {}
