@@ -16,6 +16,8 @@ import { CreateUserInput } from '../application/use-cases/create-user/create-use
 import { UserPresenter } from './user.presenter';
 import { FindByIdUserUseCase } from '../application/use-cases/find-by-id/find-by-id-user.use-case';
 import { UserId } from '../domain/entity/user.entity';
+import { UpdateUserUseCase } from '../application/use-cases/update-user/update-user.use-case';
+import { DeleteUserUseCase } from '../application/use-cases/delete-user/delete-user.use-case';
 
 @Controller('users')
 export class UserController {
@@ -23,6 +25,8 @@ export class UserController {
     private createUserUseCase: CreateUserUseCase,
     private fetchAllUsersUseCase: FetchAllUsersUseCase,
     private findByIdUseCase: FindByIdUserUseCase,
+    private updateUserUseCase: UpdateUserUseCase,
+    private deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
   @Get()
@@ -44,13 +48,18 @@ export class UserController {
     return new UserPresenter(user);
   }
 
-  // @Put(':id')
-  // async update(@Param('id') id: string, @Body() body: any) {
-  //   return this.userService.update(id, body);
-  // }
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: { name: string }) {
+    const output = await this.updateUserUseCase.execute({
+      id,
+      name: body.name,
+    });
 
-  // @Delete(':id')
-  // async remove(@Param('id') id: string) {
-  //   return this.userService.delete(id);
-  // }
+    return new UserPresenter(output);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.deleteUserUseCase.execute(new UserId(id));
+  }
 }

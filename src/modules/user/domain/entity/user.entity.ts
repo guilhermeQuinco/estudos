@@ -43,4 +43,8 @@ export class User {
     );
     return user;
   }
+
+  update(name: string) {
+    this.name = name;
+  }
 }

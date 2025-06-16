@@ -32,10 +32,27 @@ export class PrismaUserRepository implements UserRepository {
 
     return UserModelMapper.toEntity(user);
   }
-  update(id: string, user: User): Promise<User | null> {
-    throw new Error('Method not implemented.');
+  async update(user: User): Promise<void> {
+    const existingUser = await this.prisma.user.findUnique({
+      where: { id: user.getId() },
+    });
+
+    if (!existingUser) {
+      throw new Error(`User with ID: ${user.getId()} is not found`);
+    }
+
+    await this.prisma.user.update({
+      where: {
+        id: user.getId(),
+      },
+      data: UserModelMapper.toModel(user),
+    });
   }
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: UserId): Promise<void> {
+    await this.prisma.user.delete({
+      where: {
+        id: id.toString(),
+      },
+    });
   }
 }

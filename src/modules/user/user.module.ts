@@ -7,6 +7,8 @@ import { CreateUserUseCase } from './application/use-cases/create-user/create-us
 import { FetchAllUsersUseCase } from './application/use-cases/find-all/fetch-all-user.use-case';
 import { PrismaUserRepository } from './infra/prisma/user-prisma.repository';
 import { FindByIdUserUseCase } from './application/use-cases/find-by-id/find-by-id-user.use-case';
+import { UpdateUserUseCase } from './application/use-cases/update-user/update-user.use-case';
+import { DeleteUserUseCase } from './application/use-cases/delete-user/delete-user.use-case';
 
 @Module({
   imports: [PrismaModule],
@@ -20,6 +22,8 @@ import { FindByIdUserUseCase } from './application/use-cases/find-by-id/find-by-
     CreateUserUseCase,
     FetchAllUsersUseCase,
     FindByIdUserUseCase,
+    UpdateUserUseCase,
+    DeleteUserUseCase,
   ],
 })
 export class UserModule {}
