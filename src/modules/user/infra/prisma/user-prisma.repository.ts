@@ -1,8 +1,12 @@
 import { UserRepository } from '../../domain/repositories/user.repository';
-import { User } from '../../domain/entity/user.entity';
+import { User, UserId } from '../../domain/entity/user.entity';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/shared/database/prisma.service';
 import { UserModelMapper } from './user-model.mapper';
+import {
+  UserOutput,
+  UserOutputMapper,
+} from '../../application/common/user-output';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -15,13 +19,18 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
   async findAll(): Promise<User[]> {
-    throw new Error('Method not implemented.');
-    // const usersData = await this.prisma.user.findMany({});
+    const usersData = await this.prisma.user.findMany({});
 
-    // return usersData.map(UserMapper.toDomain);
+    return usersData.map(UserModelMapper.toEntity);
   }
-  findOne(id: string): Promise<User | null> {
-    throw new Error('Method not implemented.');
+  async findById(id: UserId): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: id.toString() },
+    });
+
+    if (!user) return null;
+
+    return UserModelMapper.toEntity(user);
   }
   update(id: string, user: User): Promise<User | null> {
     throw new Error('Method not implemented.');
